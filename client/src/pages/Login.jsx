@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import FaceCapture from '../components/FaceCapture';
 import axios from '../api/axios';
+import { motion } from 'framer-motion';
 
 const Login = () => {
     const [loginType, setLoginType] = useState('admin'); // 'admin' | 'patient'
@@ -97,37 +98,46 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-secondary/10 flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
+        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Blobs */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 blur-3xl -z-10"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-400/20 blur-3xl -z-10"></div>
+
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="w-full max-w-md"
+            >
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-2xl mb-4 shadow-lg">
-                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <Link to="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-indigo-600 rounded-2xl mb-6 shadow-lg shadow-primary/25 hover:scale-105 transition-transform">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                         </svg>
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-900">Smart Emergency QR</h1>
-                    <p className="text-gray-600 mt-2">Multi-Hospital Health Identity System</p>
+                    </Link>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Welcome Back</h1>
+                    <p className="text-slate-500 mt-2">Sign in to access your dashboard</p>
                 </div>
 
-                <div className="card">
+                <div className="glass-card p-8">
                     {/* Login Type Tabs */}
-                    <div className="flex border-b border-gray-200 mb-6">
+                    <div className="flex p-1 bg-slate-100/50 rounded-xl mb-8">
                         <button
-                            className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${loginType === 'admin'
-                                ? 'border-primary text-primary'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
+                            className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${loginType === 'admin'
+                                ? 'bg-white text-primary shadow-sm'
+                                : 'text-slate-500 hover:text-slate-700'
                                 }`}
                             onClick={() => {
                                 setLoginType('admin');
                                 setShowFaceAuth(false);
                             }}
                         >
-                            Hospital / Admin
+                            Hospital Staff
                         </button>
                         <button
-                            className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${loginType === 'patient'
-                                ? 'border-primary text-primary'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
+                            className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${loginType === 'patient'
+                                ? 'bg-white text-primary shadow-sm'
+                                : 'text-slate-500 hover:text-slate-700'
                                 }`}
                             onClick={() => {
                                 setLoginType('patient');
@@ -138,14 +148,10 @@ const Login = () => {
                         </button>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        {loginType === 'admin' ? 'Staff Sign In' : 'Patient Sign In'}
-                    </h2>
-
                     {!showFaceAuth ? (
                         <form onSubmit={(e) => handleSubmit(e)} className="space-y-5">
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Email Address
                                 </label>
                                 <input
@@ -154,22 +160,27 @@ const Login = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="input-field"
-                                    placeholder="Enter your email"
+                                    placeholder="name@example.com"
                                     disabled={loading}
                                 />
                             </div>
 
                             <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Password
-                                </label>
+                                <div className="flex justify-between items-center mb-1.5">
+                                    <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                                        Password
+                                    </label>
+                                    <Link to="#" className="text-sm text-primary hover:text-primary-dark font-medium">
+                                        Forgot password?
+                                    </Link>
+                                </div>
                                 <input
                                     id="password"
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="input-field"
-                                    placeholder="Enter your password"
+                                    placeholder="••••••••"
                                     disabled={loading}
                                 />
                             </div>
@@ -177,7 +188,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full btn-primary disabled:opacity-70 disabled:cursor-not-allowed mt-2"
                             >
                                 {loading ? (
                                     <span className="flex items-center justify-center">
@@ -193,68 +204,54 @@ const Login = () => {
                             </button>
                         </form>
                     ) : (
-                        <div className="space-y-6">
-                            <div className="bg-gray-50 p-6 rounded-lg text-center border border-gray-200">
-                                <h3 className="text-lg font-medium text-gray-900 mb-4">Face Verification Required</h3>
-                                <p className="text-sm text-gray-500 mb-6">
-                                    For your security, please verify your identity by scanning your face.
+                        <div className="space-y-6 text-center">
+                            <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
+                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                                    👤
+                                </div>
+                                <h3 className="text-lg font-bold text-slate-900 mb-2">Face Verification</h3>
+                                <p className="text-sm text-slate-500 mb-6">
+                                    Please look at the camera to verify your identity.
                                 </p>
 
                                 <FaceCapture
                                     onCapture={handleFaceCapture}
-                                    label="Scan Face to Login"
+                                    label="Scan Face"
                                 />
 
                                 <button
                                     onClick={() => setShowFaceAuth(false)}
-                                    className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
+                                    className="mt-6 text-sm text-slate-500 hover:text-slate-700 font-medium"
                                 >
-                                    Cancel and go back
+                                    Cancel verification
                                 </button>
                             </div>
                         </div>
                     )}
 
-                    <div className="mt-6 space-y-3">
-                        <div className="text-center">
-                            <p className="text-sm text-gray-600 mb-2">
-                                Don't have an account?{' '}
-                                <Link to="/register-hospital" className="text-primary hover:text-primary-dark font-medium">
-                                    Register your hospital
-                                </Link>
-                            </p>
-                        </div>
+                    <div className="mt-8 pt-6 border-t border-slate-100">
+                        <p className="text-center text-sm text-slate-500 mb-4">
+                            Don't have an account?{' '}
+                            <Link to="/register-hospital" className="text-primary hover:text-primary-dark font-semibold">
+                                Register Hospital
+                            </Link>
+                        </p>
 
+                        {/* Quick Login for Demo */}
                         <div className="grid grid-cols-3 gap-2">
-                            <button
-                                type="button"
-                                onClick={fillAdminCredentials}
-                                className="px-2 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium"
-                            >
-                                Admin
+                            <button onClick={fillAdminCredentials} className="text-xs px-2 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded border border-slate-200 transition-colors">
+                                Demo Admin
                             </button>
-                            <button
-                                type="button"
-                                onClick={fillHospitalCredentials}
-                                className="px-2 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium"
-                            >
-                                Hospital
+                            <button onClick={fillHospitalCredentials} className="text-xs px-2 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded border border-slate-200 transition-colors">
+                                Demo Hospital
                             </button>
-                            <button
-                                type="button"
-                                onClick={fillPatientCredentials}
-                                className="px-2 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-medium"
-                            >
-                                Patient
+                            <button onClick={fillPatientCredentials} className="text-xs px-2 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 rounded border border-slate-200 transition-colors">
+                                Demo Patient
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <p className="text-center text-gray-600 text-sm mt-6">
-                    Emergency medical identity system for healthcare institutions
-                </p>
-            </div>
+            </motion.div>
         </div>
     );
 };

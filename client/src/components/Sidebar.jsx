@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from '../api/axios';
 
 const Sidebar = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const isSuperAdmin = user?.role === 'SUPER_ADMIN';
     const location = useLocation();
     const [requestCount, setRequestCount] = useState(0);
@@ -12,18 +12,14 @@ const Sidebar = () => {
     useEffect(() => {
         if (isSuperAdmin) {
             fetchRequestCount();
-            // Poll for updates every 30 seconds
             const interval = setInterval(fetchRequestCount, 30000);
-
-            // Listen for updates from AdminRequests
             window.addEventListener('request-updated', fetchRequestCount);
-
             return () => {
                 clearInterval(interval);
                 window.removeEventListener('request-updated', fetchRequestCount);
             };
         }
-    }, [isSuperAdmin, location.pathname]); // Re-fetch when navigating
+    }, [isSuperAdmin, location.pathname]);
 
     const fetchRequestCount = async () => {
         try {
@@ -40,7 +36,7 @@ const Sidebar = () => {
             path: '/dashboard',
             icon: (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
             )
         },
@@ -54,6 +50,15 @@ const Sidebar = () => {
             )
         },
         {
+            name: 'ID Cards',
+            path: '/hospital/id-cards',
+            icon: (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0c0 .884-.95 2-2.122 2H6.5" />
+                </svg>
+            )
+        },
+        ...(!isSuperAdmin ? [{
             name: 'Add Patient',
             path: '/patients/new',
             icon: (
@@ -61,7 +66,7 @@ const Sidebar = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
             )
-        },
+        }] : []),
         ...(isSuperAdmin ? [{
             name: 'Edit Requests',
             path: '/admin/requests',
@@ -75,29 +80,53 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside className="w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-4rem)]">
-            <nav className="p-4 space-y-2">
+        <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full z-10">
+            <div className="p-6">
+                <Link to="/" className="flex items-center space-x-3 mb-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <span className="text-lg font-bold text-slate-900">SmartHealth</span>
+                </Link>
+                <p className="text-xs text-slate-500 ml-11">Hospital Admin Portal</p>
+            </div>
+
+            <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.path}
                         to={item.path}
                         className={({ isActive }) =>
-                            `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${isActive
-                                ? 'bg-primary text-white shadow-md'
-                                : 'text-gray-700 hover:bg-gray-100'
+                            `flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive
+                                ? 'bg-blue-50 text-primary shadow-sm'
+                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`
                         }
                     >
-                        {item.icon}
-                        <span className="font-medium flex-1">{item.name}</span>
+                        <span className="mr-3">{item.icon}</span>
+                        <span className="flex-1">{item.name}</span>
                         {item.badge && (
-                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
                                 {item.badge}
                             </span>
                         )}
                     </NavLink>
                 ))}
             </nav>
+
+            <div className="p-4 border-t border-slate-200">
+                <button
+                    onClick={logout}
+                    className="flex items-center w-full px-4 py-3 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium"
+                >
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Sign Out
+                </button>
+            </div>
         </aside>
     );
 };

@@ -8,25 +8,33 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#E53935',
-                    dark: '#C62828',
-                    light: '#EF5350'
+                    DEFAULT: '#3B82F6', // Blue-500
+                    dark: '#2563EB',    // Blue-600
+                    light: '#60A5FA',   // Blue-400
+                    50: '#EFF6FF',
+                    100: '#DBEAFE',
                 },
                 secondary: {
-                    DEFAULT: '#1E88E5',
-                    dark: '#1565C0',
-                    light: '#42A5F5'
+                    DEFAULT: '#64748B', // Slate-500
+                    dark: '#475569',    // Slate-600
+                    light: '#94A3B8'    // Slate-400
                 },
-                success: '#4CAF50',
-                warning: '#FFC107',
-                danger: '#E53935'
+                success: '#10B981', // Emerald-500
+                warning: '#F59E0B', // Amber-500
+                danger: '#EF4444',  // Red-500
+                dark: '#0F172A',    // Slate-900
+                light: '#F8FAFC'    // Slate-50
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
             },
             boxShadow: {
-                'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+            },
+            backdropBlur: {
+                xs: '2px',
             }
         },
     },

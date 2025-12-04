@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 import Sidebar from '../components/Sidebar';
 import axios from '../api/axios';
 import toast from 'react-hot-toast';
@@ -68,7 +68,6 @@ const PatientList = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navbar />
             <div className="flex">
                 <Sidebar />
                 <main className="flex-1 p-8">

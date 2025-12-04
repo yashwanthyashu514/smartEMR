@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from '../api/axios';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const RegisterHospital = () => {
     const navigate = useNavigate();
@@ -44,25 +45,42 @@ const RegisterHospital = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-secondary/10 p-4 py-8">
-            <div className="max-w-3xl mx-auto">
+        <div className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden">
+            {/* Background Blobs */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-400/20 blur-3xl -z-10"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-400/20 blur-3xl -z-10"></div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="w-full max-w-3xl"
+            >
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-secondary rounded-2xl mb-4 shadow-lg">
-                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <Link to="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-secondary to-slate-600 rounded-2xl mb-6 shadow-lg shadow-slate-400/25 hover:scale-105 transition-transform">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-900">Register Your Hospital</h1>
-                    <p className="text-gray-600 mt-2">Join the Smart Emergency QR Health Network</p>
+                    </Link>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Register Your Hospital</h1>
+                    <p className="text-slate-500 mt-2">Join the Smart Emergency QR Health Network</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="card space-y-6">
+                <form onSubmit={handleSubmit} className="glass-card p-8 space-y-8">
                     {/* Hospital Details */}
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Hospital Information</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3 mb-6">
+                            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-primary">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
+                            <h2 className="text-xl font-bold text-slate-900">Hospital Information</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Hospital Name <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -71,12 +89,13 @@ const RegisterHospital = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="e.g. City General Hospital"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Hospital Email <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -85,12 +104,13 @@ const RegisterHospital = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="contact@hospital.com"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Phone Number
                                 </label>
                                 <input
@@ -99,24 +119,26 @@ const RegisterHospital = () => {
                                     value={formData.phone}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="+1 (555) 000-0000"
                                 />
                             </div>
 
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Address
                                 </label>
                                 <textarea
                                     name="address"
                                     value={formData.address}
                                     onChange={handleChange}
-                                    className="input-field"
+                                    className="input-field min-h-[80px]"
+                                    placeholder="Full street address"
                                     rows="3"
                                 />
                             </div>
 
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Primary Contact Name
                                 </label>
                                 <input
@@ -125,20 +147,31 @@ const RegisterHospital = () => {
                                     value={formData.primaryContactName}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="Name of contact person"
                                 />
                             </div>
                         </div>
                     </div>
 
+                    <div className="border-t border-slate-200/60"></div>
+
                     {/* Admin User Details */}
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Hospital Admin Account</h2>
-                        <p className="text-sm text-gray-600 mb-4">
-                            After your hospital is approved, you can log in with these credentials and start adding patients.
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3 mb-6">
+                            <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-900">Admin Account</h2>
+                                <p className="text-sm text-slate-500">Create the primary administrator account for this hospital.</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Admin Name <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -147,12 +180,13 @@ const RegisterHospital = () => {
                                     value={formData.adminName}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="Full Name"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Admin Email <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -161,12 +195,13 @@ const RegisterHospital = () => {
                                     value={formData.adminEmail}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="admin@hospital.com"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                                     Admin Password <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -175,6 +210,7 @@ const RegisterHospital = () => {
                                     value={formData.adminPassword}
                                     onChange={handleChange}
                                     className="input-field"
+                                    placeholder="••••••••"
                                     minLength="6"
                                     required
                                 />
@@ -182,11 +218,11 @@ const RegisterHospital = () => {
                         </div>
                     </div>
 
-                    <div className="flex space-x-4 pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-end space-x-4 pt-6 border-t border-slate-200/60">
                         <button
                             type="button"
                             onClick={() => navigate('/login')}
-                            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                            className="btn-secondary"
                             disabled={loading}
                         >
                             Cancel
@@ -194,25 +230,32 @@ const RegisterHospital = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="btn-primary min-w-[160px]"
                         >
-                            {loading ? 'Submitting...' : 'Submit Registration'}
+                            {loading ? (
+                                <span className="flex items-center justify-center">
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Submitting...
+                                </span>
+                            ) : (
+                                'Submit Registration'
+                            )}
                         </button>
                     </div>
                 </form>
 
-                <div className="text-center mt-6">
-                    <p className="text-sm text-gray-600">
+                <div className="text-center mt-8">
+                    <p className="text-sm text-slate-600">
                         Already have an account?{' '}
-                        <button
-                            onClick={() => navigate('/login')}
-                            className="text-secondary hover:underline font-medium"
-                        >
+                        <Link to="/login" className="text-primary hover:text-primary-dark font-semibold transition-colors">
                             Sign In
-                        </button>
+                        </Link>
                     </p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };
